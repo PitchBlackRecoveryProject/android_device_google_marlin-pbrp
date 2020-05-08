@@ -1,0 +1,4 @@
+cc_library_headers {
+    name: "marlin-kernel-headers",
+    export_include_dirs: ["."],
+}

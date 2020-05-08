@@ -1,0 +1,89 @@
+# config.mk
+#
+# Product-specific compile-time definitions
+#
+
+TARGET_BOARD_PLATFORM := msm8996
+TARGET_BOOTLOADER_BOARD_NAME := marlin
+
+TARGET_USES_INTERACTION_BOOST := true
+
+TARGET_USES_AOSP := true
+TARGET_ARCH := arm64
+TARGET_ARCH_VARIANT := armv8-a
+TARGET_CPU_ABI := arm64-v8a
+TARGET_CPU_ABI2 :=
+TARGET_CPU_VARIANT := kryo
+
+TARGET_2ND_ARCH := arm
+TARGET_2ND_ARCH_VARIANT := armv8-a
+TARGET_2ND_CPU_ABI := armeabi-v7a
+TARGET_2ND_CPU_ABI2 := armeabi
+TARGET_2ND_CPU_VARIANT := kryo
+
+TARGET_NO_BOOTLOADER := true
+TARGET_NO_KERNEL := false
+TARGET_RECOVERY_FSTAB := device/google/marlin/fstab.common
+BOARD_USES_RECOVERY_AS_BOOT := true
+BOARD_BUILD_SYSTEM_ROOT_IMAGE := true
+BOOTLOADER_GCC_VERSION := arm-eabi-4.8
+# use msm8996 LK configuration
+BOOTLOADER_PLATFORM := msm8996
+
+TARGET_USERIMAGES_USE_EXT4 := true
+BOARD_BOOTIMAGE_PARTITION_SIZE := 0x02000000
+BOARD_SYSTEMIMAGE_PARTITION_SIZE := 2147483648
+BOARD_SYSTEMIMAGE_EXTFS_INODE_COUNT := 4096
+BOARD_USERDATAIMAGE_PARTITION_SIZE := 10737418240
+BOARD_PERSISTIMAGE_PARTITION_SIZE := 33554432
+BOARD_PERSISTIMAGE_FILE_SYSTEM_TYPE := ext4
+BOARD_FLASH_BLOCK_SIZE := 131072 # (BOARD_KERNEL_PAGESIZE * 64)
+
+TARGET_USES_ION := true
+TARGET_USES_NEW_ION_API :=true
+ifneq ($(TARGET_USES_AOSP),true)
+TARGET_USES_QCOM_BSP := true
+endif
+
+BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 androidboot.hardware=marlin user_debug=31 ehci-hcd.park=3 lpm_levels.sleep_disabled=1 cma=32M@0-0xffffffff loop.max_part=7 androidboot.selinux=permissive
+BOARD_KERNEL_BASE        := 0x80000000
+BOARD_KERNEL_PAGESIZE    := 4096
+ifneq ($(filter marlin_kasan, $(TARGET_PRODUCT)),)
+BOARD_KERNEL_OFFSET      := 0x80000
+BOARD_KERNEL_TAGS_OFFSET := 0x02500000
+BOARD_RAMDISK_OFFSET     := 0x02700000
+BOARD_MKBOOTIMG_ARGS     := --kernel_offset $(BOARD_KERNEL_OFFSET) --ramdisk_offset $(BOARD_RAMDISK_OFFSET) --tags_offset $(BOARD_KERNEL_TAGS_OFFSET)
+else
+BOARD_KERNEL_TAGS_OFFSET := 0x02000000
+BOARD_RAMDISK_OFFSET     := 0x02200000
+endif
+TARGET_KERNEL_ARCH := arm64
+TARGET_KERNEL_HEADER_ARCH := arm64
+TARGET_KERNEL_CROSS_COMPILE_PREFIX := aarch64-linux-android-
+TARGET_USES_UNCOMPRESSED_KERNEL := false
+LZMA_RAMDISK_TARGETS := recovery,boot
+
+TARGET_PLATFORM_DEVICE_BASE := /devices/soc/
+
+TARGET_RECOVERY_UI_LIB := librecovery_ui_nanohub
+
+TW_THEME := portrait_hdpi
+TW_INCLUDE_FB2PNG := true
+BOARD_SUPPRESS_SECURE_ERASE := true
+TARGET_RECOVERY_QCOM_RTC_FIX := true
+TW_INPUT_BLACKLIST := "hbtp_vm"
+TW_DEFAULT_BRIGHTNESS := "80"
+TW_INCLUDE_CRYPTO := true
+AB_OTA_UPDATER := true
+#TWRP_INCLUDE_LOGCAT := true
+#TARGET_USES_LOGD := true
+TW_INCLUDE_REPACKTOOLS := true
+TW_EXCLUDE_UBSAN := true
+TW_USE_TOOLBOX := true
+TW_EXCLUDE_DEFAULT_USB_INIT := true
+#TARGET_RECOVERY_DEVICE_MODULES += android.hardware.boot@1.0 android.hardware.weaver@1.0
+#TW_RECOVERY_ADDITIONAL_RELINK_FILES := out/target/product/marlin/system/lib64/android.hardware.boot@1.0.so out/target/product/marlin/system/lib64/android.hardware.weaver@1.0.so
+#TARGET_RECOVERY_DEVICE_MODULES += strace debuggerd valgrind
+#TW_RECOVERY_ADDITIONAL_RELINK_FILES += out/target/product/marlin/system/bin/strace out/target/product/marlin/system/bin/valgrind
+#TW_USE_SERIALNO_PROPERTY_FOR_DEVICE_ID := true
+BOARD_VNDK_RUNTIME_DISABLE := true
